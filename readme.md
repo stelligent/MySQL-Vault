@@ -36,7 +36,8 @@
     2. configure mysql backend
         $ vault write mysql/config/connection connection_url="vaultadmin:vaultpass@tcp(127.0.0.1:3306)/"
     3. create role
-        $ vault write mysql/roles/readonly sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';"
+        $ vault write mysql/roles/readonly sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';\
+          GRANT SELECT ON *.* TO '{{name}}'@'%';"
     4. verify role
         $ vault read mysql/creds/readonly
     
