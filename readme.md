@@ -1,7 +1,7 @@
 ###  Obfuscating MySQL passwords with Hashicorp Vault
 
 ###  Assumptions
-     MySQL and Hashicorp Vaul is installed
+     MySQL and Hashicorp Vault is installed
      
 ###  Technical Components
      Backend   : Spring Boot
