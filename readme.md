@@ -79,6 +79,8 @@
 
         $ edit sourceenv.sh and replace VAULT_TOKEN with token generated in step-2;
         $ source source_env.sh
+        
+        More Info : https://www.hashicorp.com/blog/codifying-vault-policies-and-configuration/
     
 ###  Compiling and Starting application 
     $ edit src/main/resources/bootstrap.properties. 
