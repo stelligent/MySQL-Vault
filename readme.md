@@ -15,20 +15,24 @@
 
 ###  Completing Vault pre-reqs
     1. generate self-signed certificates(non-prod use only; for prod use CA certs)
-       $ cd vault; ./generate_ss_certs.sh
+       $ cd vault; 
+       $ ./generate_ss_certs.sh
     2. modify vault/vault.conf with appropriate cert names generates in previous step
 
 ###  Starting and Initializing Vault
     1. starting vault
-        $cd vault; $ vault server -config=vault.conf
+        $ cd vault; 
+        $ vault server -config=vault.conf
     2. initializing vault (IMP: save unseal keys and tokens generated during this step)
-        $cd vault; $ vault init
+        $ cd vault; 
+        $ vault init
     3. unseal vault 
-        $cd vault; $ vault unseal key1 [key2, key3]
+        $ cd vault; 
+        $ vault unseal key1 [key2, key3]
     4. (IMP)edit and source vault params 
-        $cd vault;
-        $edit sourceenv.sh and replace VAULT_TOKEN with token generated in step-2;
-        $source source_env.sh
+        $ cd vault;
+        $ edit sourceenv.sh and replace VAULT_TOKEN with token generated in step-2;
+        $ source source_env.sh
 
 ###  Configuring MySQL Secrect backend in Vault
     1. mount mysql backend
