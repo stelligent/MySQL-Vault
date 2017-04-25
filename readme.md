@@ -1,7 +1,7 @@
 ###  Obfuscating MySQL passwords with Hashicorp Vault
 
 ###  Assumptions
-     MySQL and Hashicorp Vault is installed
+     MySQL, Hashicorp Vault and Consul are installed
      
 ###  Technical Components
      Backend   : Spring Boot
@@ -16,13 +16,13 @@
 ###  Vault Workflow
     Its important to understand the workflow steps for using Vault in production
     1. Generate server and client certificates for the server on which vault will be running
-          $ ./generate_ss_certs.sh
+          $ cd vault; ./generate_ss_certs.sh
 
     2. Start consul to serve as vault backend/storage. 
           $ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1
     
     3. Start vault server. Options such as consul backend and certificates are need to be provided at this stage. See vault.conf
-          $ vault server -config=vault.conf
+          $ cd vault; vault server -config=vault.conf
     
     4. Initialize vault - this will generate root/master token and unseal keys - save these keys.
        Vault initialization must me performed only once if you;re using a persistent store/backend like consul. 
