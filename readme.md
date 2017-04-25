@@ -14,51 +14,38 @@
     $ mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'vaultadmin'@'%' WITH GRANT OPTION;" -p;
 
 ###  Vault Workflow
-    Its important to understand the workflow steps for using Vault in production
-    1. Generate server and client certificates for the server on which vault will be running
-          $ cd vault; ./generate_ss_certs.sh
-
-    2. Start consul to serve as vault backend/storage. 
-          $ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1
+    Workflow steps for using Vault in production mode.
     
-    3. Start vault server. Options such as consul backend and certificates are need to be provided at this stage. See vault.conf
-          $ cd vault; vault server -config=vault.conf
+    1. ./start_vault.sh
+       This will :
+          #Generate server and client certificates for the server on which vault will be running
+          #Start consul to serve as vault backend/storage. 
+          #Start vault server. 
     
-    4. Initialize vault - this will generate root/master token and unseal keys - save these keys.
+    2. ./init_vault.sh
+       This will initialize vault and generate root/master token and unseal keys - save these keys.
        Vault initialization must me performed only once if you;re using a persistent store/backend like consul. 
        If backend in memory("inmem"); vault init must be performed every time vault is started 
-          $ vault init
     
-    5. Unseal vaul. This is performed everytime vault is started
+    3. Unseal vaul. This is performed everytime vault is started
           $ vault unseal key1 [key2, [key3]]
     
-    6. At this stage vault is started in encrypted mode, initialized and using consul as backend(persistent storage) 
-          $ edit sourceenv.sh and replace VAULT_TOKEN with token generated in step-2;
-          $ source source_env.sh
+    4. Configure secret backend. For each of the "secret backend", we need to do the following
     
-    7. Configure secret backend. For each of the "secret backend", we need to do the following
-    
-       7.1 Use root token or generated a token with root-policy using unseal keys
+       4.1 Use root token or generated a token with root-policy using unseal keys
           $ export VAULT_TOKEN=########################### 
        
-       7.2 Mount secret backend
-          $ vault mount mysql
-       
-       7.2 Configure connection endpoint so that vault can connect to the secret backend
-          $ vault write mysql/config/connection connection_url="vaultadmin:vaultpass@tcp(127.0.0.1:3306)/"
-       
-       7.3 Create appropriate role so that upon connection(step 7.2) 
-           vault can create appropriate users/policies inside of the secret backend
-           $ vault write mysql/roles/readonly sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';\
-             GRANT SELECT ON *.* TO '{{name}}'@'%';"
-       
-       7.4 Verify the connection works
-           $ vault read mysql/creds/readonly
+       7.2 ./configure_mysql_secretbackend.sh
+           This will - 
+           configure connection endpoint so that vault can connect to the secret backend
+           create role so that vault can create appropriate users/policies inside of the secret backend
+           verify that the connection works
     
-    8. Creating Authentication for secret backend(mysql developers/users)
+    5. Creating Authentication for secret backend(mysql developers/users)
     
-       8.1 Create a policy for mysql user. 
-           This policy must deny all access to connection endpoints created for vault in step 7.2 above. See mysql-policy.conf
+       5.1 ./configure_mysql_secretbackend.sh
+           This will
+           create a policy for mysql user to deny all access to connection endpoints 
            $ vault policy-write mysql-readonly mysql-policy.conf
        
        8.2 Creat authentication mechanism with this policy. 
