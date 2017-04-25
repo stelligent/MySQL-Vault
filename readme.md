@@ -35,38 +35,20 @@
        4.1 Use root token or generated a token with root-policy using unseal keys
           $ export VAULT_TOKEN=########################### 
        
-       7.2 ./configure_mysql_secretbackend.sh
+       4.2 ./configure_mysql_secretbackend.sh
            This will - 
            configure connection endpoint so that vault can connect to the secret backend
            create role so that vault can create appropriate users/policies inside of the secret backend
+           create a policy for mysql user to deny all access to connection endpoints 
            verify that the connection works
     
     5. Creating Authentication for secret backend(mysql developers/users)
     
-       5.1 ./configure_mysql_secretbackend.sh
-           This will
-           create a policy for mysql user to deny all access to connection endpoints 
-           $ vault policy-write mysql-readonly mysql-policy.conf
-       
-       8.2 Creat authentication mechanism with this policy. 
-           In our case we will create token-authentication which is then distributed to developer community.
-           $ vault token-create -policy="mysql-readonly"
-       
-       8.3 verify connection/policy works. Use the new limited privileges token created in step 8.2 above.
-           $ export VAULT_TOKEN=########################### 
-           $ vault read mysql/creds/readonly
+       5.1 ./configure_authentication_token.sh
+           This will create token-authentication which is then distributed to developer community.
+           Users can now use the token to connect to mysql. 
+           Rotation policies set for the token(step 8.2) will force the refresh of user/pass.
     
-    9. Users can now use the token to connect to mysql. 
-       Rotation policies set for the token(step 8.2) will force the refresh of user/pass.
-    
-    10. Shutdown Vault
-       10.1 Seal the vault. This will flush all vault data(encrypted) to consul
-       10.2 Kill the vault server(if needed). 
-
-
-        $ edit sourceenv.sh and replace VAULT_TOKEN with token generated in step-2;
-        $ source source_env.sh
-        
         More Info : https://www.hashicorp.com/blog/codifying-vault-policies-and-configuration/
     
 ###  Compiling and Starting application 
