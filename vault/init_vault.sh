@@ -1,9 +1,8 @@
 #!/bin/bash
 
-export VAULT_ADDR="https://localhost:8200"
+source vault_params.sh
 
-export VAULT_SKIP_VERIFY=true # skip self-signed certificate validation
-
-vault init
+read -p "$ vault init -key-shares=1 -key-threshold=1"
+vault init -key-shares=1 -key-threshold=1
 
 exit $?

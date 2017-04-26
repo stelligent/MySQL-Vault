@@ -17,7 +17,7 @@ vault write mysql/roles/readonly sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '
 
 read -p ""; clear
 
-read -p "vault policy-write mysql-readonly mysql-policy.conf"
+read -p "$ vault policy-write mysql-readonly mysql-policy.conf"
 vault policy-write mysql-readonly mysql-policy.conf
 
 read -p ""; clear
