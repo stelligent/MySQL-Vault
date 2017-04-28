@@ -7,7 +7,7 @@ vault token-create -policy="mysql-readonly"
 
 read -p ""; clear
 
-read -p "$ vault read mysql/creds/readonly"
-vault read mysql/creds/readonly
+#read -p "$ vault read mysql/creds/readonly"
+#vault read mysql/creds/readonly
 
 exit $?
